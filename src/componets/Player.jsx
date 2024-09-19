@@ -1,6 +1,11 @@
 import { useState } from 'react';
 
-function Player({ name, symbol }) {
+function Player({ initialName, symbol }) {
+  /**
+   *  useState를 동일한 컴포넌트 안에 여러번 사용 가능
+   *  제어하고자 하는 상태가 많을때 다중 사용 용이
+   */
+  const [playerName, setPlayerName] = useState(initialName);
   const [isEditing, setIsEditing] = useState(false); //배열 구조 분해 할당
 
   /**
@@ -20,19 +25,21 @@ function Player({ name, symbol }) {
      *  setIsEditing((editing) => !isEditing);
      *
      *  ★ 상태 변경시 이전의 상태값에 기반하여 변경한다면?★
-     * setIsEditing((editing) => !isEditing);
+     *  setIsEditing((editing) => !editing);
+     *  함수 형태를 사용한다면 리액트가 보장해줄 수 있는 것은 이 상태값은 언제나 가장 최신 버전이라는 것!!!!!
      */
+    setIsEditing((editing) => !editing);
   }
 
-  let playerName = <span className='player-name'>{name}</span>;
+  let editablePlayerName = <span className='player-name'>{playerName}</span>;
   !isEditing
-    ? playerName
-    : (playerName = <input type='text' value={name} required />);
+    ? editablePlayerName
+    : (editablePlayerName = <input type='text' value={playerName} required />);
 
   return (
     <li>
       <span className='player'>
-        {playerName}
+        {editablePlayerName}
         <span className='player-symbol'>{symbol}</span>
       </span>
       <button onClick={handleEditClick}>{isEditing ? '저장' : '수정'}</button>
