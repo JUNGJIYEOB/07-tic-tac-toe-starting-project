@@ -15,7 +15,7 @@ function GameBoards() {
         ...prevGameBoard.map((innerArray) => [...innerArray]),
       ];
       // 이거랑 무슨 차이가 날까..?
-      //const updtGameBoard = [...prevGameBoard];
+      //   const updtGameBoard = [...prevGameBoard];
 
       console.log('updtGameBoard : ', updtGameBoard);
       updtGameBoard[rowIndex][colIndex] = 'X';
