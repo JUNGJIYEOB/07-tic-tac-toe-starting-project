@@ -1,18 +1,38 @@
+import { useState } from 'react';
+
 const initialGameBoard = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
 ];
 
-function GameBoard() {
+function GameBoards() {
+  const [gameBoard, setGameBoard] = useState(initialGameBoard);
+
+  function handleSelectSquare(rowIndex, colIndex) {
+    setGameBoard((prevGameBoard) => {
+      const updtGameBoard = [
+        ...prevGameBoard.map((innerArray) => [...innerArray]),
+      ];
+      // 이거랑 무슨 차이가 날까..?
+      //const updtGameBoard = [...prevGameBoard];
+
+      console.log('updtGameBoard : ', updtGameBoard);
+      updtGameBoard[rowIndex][colIndex] = 'X';
+      return updtGameBoard;
+    });
+  }
+
   return (
     <ol id='game-board'>
-      {initialGameBoard.map((row, rowIndex) => (
+      {gameBoard.map((row, rowIndex) => (
         <li key={rowIndex}>
           <ol>
             {row.map((playerSymbol, colIndex) => (
               <li key={colIndex}>
-                <button>{playerSymbol}</button>
+                <button onClick={() => handleSelectSquare(rowIndex, colIndex)}>
+                  {playerSymbol}
+                </button>
               </li>
             ))}
           </ol>
@@ -21,4 +41,4 @@ function GameBoard() {
     </ol>
   );
 }
-export default GameBoard;
+export default GameBoards;
