@@ -2,19 +2,53 @@ import { useState } from 'react';
 import GameBoards from './componets/GameBoard';
 import Log from './componets/Log';
 import Player from './componets/Player';
+/**
+ * @param {gameTurns} gameTurns
+ * @returns currentPlayer
+ * @description 이 헬퍼 함수는 컴포넌트와 관련된 그 어떤 상태나 데이터에 접근할 필요가 없음
+ * 또한 컴포넌트 함수가 재실행 될 때 스스로 재실행하지 않아도 됨
+ */
+function deriveActivePlayer(gameTurns) {
+  let currentPlayer = 'X';
+
+  if (gameTurns.length > 0 && gameTurns[0].player === 'X') {
+    currentPlayer = 'O';
+  }
+  return currentPlayer;
+}
 
 function App() {
-  const [activePlayer, setActivePlayer] = useState('X');
+  /*
+   * 86.State(상태) 관리 간소화 및 불필요한 State(상태) 분별
+   * 상태가 UI 업데이트를 실행하는 것은 맞지만
+   * 이미 해당 컴포넌트에는 gameState 상태가 있다는 것
+   * 이 상태는 버튼을 선택할 때마다 이미 변하고 있음
+   * 즉, 버튼을 클릭할 때마다 실행됨
+   * 그로므로 이 activePlayer 상태를 추가로 더해서UI 업데이트를 실행시킬 필요는 없음
+   * 물론 여기서 필요한 정보는 '현재 어떤 플레이어가 진행 중인지 대한 정보'이지만 이 정보는 gameTurns에서 가져올 수도 있음
+   * const [activePlayer, setActivePlayer] = useState('X'); => 이 부분을 삭제하고도 파생된 상태를 더 할 수 있고
+   *
+   */
   const [gameTurns, setGameTurns] = useState([]);
 
-  function handleSelectSquare(rowIndex, colIndex) {
-    setActivePlayer((curActivePlayer) => (curActivePlayer === 'X' ? 'O' : 'X'));
-    setGameTurns((prevTurns) => {
-      let currentPlayer = 'X';
+  const activePlayer = deriveActivePlayer(gameTurns);
 
-      if (prevTurns.length > 0 && prevTurns[0].player === 'X') {
-        currentPlayer = 'O';
-      }
+  function handleSelectSquare(rowIndex, colIndex) {
+    //이전 상태에서 상태 변경을 할 때에는 하단의 방법과 같이 해야함
+    setGameTurns((prevTurns) => {
+      /*
+       * 86.State(상태) 관리 간소화 및 불필요한 State(상태) 분별
+       * 여기에선 activePlayer를 차례에 대한 상태 변화로 파생
+       * let currentPlayer = 'X'
+       * if (gameTurns.length > 0 && gameTurns[0].player === 'X') {
+       *    currentPlayer = 'O';
+       * }
+       *
+       * 여기에서 상태를 이전의 gameTurns 상태로 부터 파생시켜야 함
+       */
+      const currentPlayer = deriveActivePlayer(prevTurns);
+      //86.State(상태) 관리 간소화 및 불필요한 State(상태) 분별
+      //이전 차례에 기반한 내용
       const updatedTurns = [
         /**
          * 두 종류의 상태를 병합하는 것 지양

@@ -1,6 +1,4 @@
 function Log({ turns }) {
-  console.log('Log turns : ', turns);
-
   return (
     <ol id='log'>
       {turns.map((turn) => (
