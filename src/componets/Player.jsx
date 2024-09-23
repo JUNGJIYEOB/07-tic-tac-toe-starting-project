@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function Player({ initialName, symbol }) {
+function Player({ initialName, symbol, isActive }) {
   /**
    *  useState를 동일한 컴포넌트 안에 여러번 사용 가능
    *  제어하고자 하는 상태가 많을때 다중 사용 용이
@@ -48,7 +48,7 @@ function Player({ initialName, symbol }) {
       ));
 
   return (
-    <li>
+    <li className={isActive ? 'active' : undefined}>
       <span className='player'>
         {editablePlayerName}
         <span className='player-symbol'>{symbol}</span>
