@@ -2,6 +2,8 @@ import { useState } from 'react';
 import GameBoards from './componets/GameBoard';
 import Log from './componets/Log';
 import Player from './componets/Player';
+import { WINNING_COMBINATIONS } from './componets/WINNING-COMBINATIONS.JS';
+
 /**
  * @param {gameTurns} gameTurns
  * @returns currentPlayer
