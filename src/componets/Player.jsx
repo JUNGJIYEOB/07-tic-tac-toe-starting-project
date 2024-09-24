@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function Player({ initialName, symbol, isActive }) {
+function Player({ initialName, symbol, isActive, onRename }) {
   /**
    *  useState를 동일한 컴포넌트 안에 여러번 사용 가능
    *  제어하고자 하는 상태가 많을때 다중 사용 용이
@@ -29,6 +29,7 @@ function Player({ initialName, symbol, isActive }) {
      *  함수 형태를 사용한다면 리액트가 보장해줄 수 있는 것은 이 상태값은 언제나 가장 최신 버전이라는 것!!!!!
      */
     setIsEditing((editing) => !editing);
+    isEditing && onRename(symbol, playerName);
   }
 
   function handleChange(evt) {

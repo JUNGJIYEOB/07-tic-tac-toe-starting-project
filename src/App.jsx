@@ -39,7 +39,11 @@ function App() {
    *
    */
   const [gameTurns, setGameTurns] = useState([]); //젙체 게임에서 true/false 를 도출할 수 있는 하나뿐인 출처
-
+  //Player 컴포넌트에 있는 state 를 끌어올리지 않은 이유 : 타이핑 칠떄마다 리로드됨
+  const [players, setPlayers] = useState({
+    X: 'Player 1',
+    O: 'Player 2',
+  });
   const activePlayer = deriveActivePlayer(gameTurns);
   //[...initialGameBoard] 얕은 복사(껍떼기만 복사) 객체의 1depth까지만 복사하는 것을 말한다.
   let gameBoard = [...initialGameBoard.map((array) => [...array])]; //깊은 복사
@@ -62,7 +66,7 @@ function App() {
       firstSquareSymbol === secondSquareSymbol &&
       firstSquareSymbol === thirdSquareSymbol
     ) {
-      winner = firstSquareSymbol;
+      winner = players[firstSquareSymbol];
     }
   }
   const hasDraw = gameTurns.length === 9 && !winner;
@@ -97,6 +101,16 @@ function App() {
   function handleRestart() {
     setGameTurns([]);
   }
+
+  function handlePlayerNameChange(symbol, newName) {
+    setPlayers((prvPlayes) => {
+      return {
+        ...prvPlayes, //이전 객체를 펼쳐서 해당key(symbol)를 바꾼다
+        [symbol]: newName,
+      };
+    });
+  }
+
   return (
     <main>
       <div id='game-container'>
@@ -105,11 +119,13 @@ function App() {
             initialName='player 1'
             symbol='X'
             isActive={activePlayer === 'X'}
+            onRename={handlePlayerNameChange}
           />
           <Player
             initialName='player 2'
             symbol='O'
             isActive={activePlayer === 'O'}
+            onRename={handlePlayerNameChange}
           />
         </ol>
         {(winner || hasDraw) && (
