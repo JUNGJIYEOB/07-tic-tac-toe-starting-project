@@ -3,7 +3,12 @@ import GameBoards from './componets/GameBoard';
 import Log from './componets/Log';
 import Player from './componets/Player';
 import { WINNING_COMBINATIONS } from './componets/WINNING-COMBINATIONS.JS';
-
+//js null => false
+const initialGameBoard = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null],
+];
 /**
  * @param {gameTurns} gameTurns
  * @returns currentPlayer
@@ -34,6 +39,30 @@ function App() {
   const [gameTurns, setGameTurns] = useState([]);
 
   const activePlayer = deriveActivePlayer(gameTurns);
+
+  let gameBoard = initialGameBoard;
+  let winner;
+  for (const turn of gameTurns) {
+    const { square, player } = turn; //객체 분해할당
+    const { row, col } = square; //객체 분해할당 2번 한 것
+    gameBoard[row][col] = player;
+  }
+  for (const combination of WINNING_COMBINATIONS) {
+    const firstSquareSymbol =
+      gameBoard[combination[0].row][combination[0].column];
+    const secondSquareSymbol =
+      gameBoard[combination[1].row][combination[1].column];
+    const thirdSquareSymbol =
+      gameBoard[combination[2].row][combination[2].column];
+
+    if (
+      firstSquareSymbol &&
+      firstSquareSymbol === secondSquareSymbol &&
+      firstSquareSymbol === thirdSquareSymbol
+    ) {
+      winner = firstSquareSymbol;
+    }
+  }
 
   function handleSelectSquare(rowIndex, colIndex) {
     //이전 상태에서 상태 변경을 할 때에는 하단의 방법과 같이 해야함
@@ -79,7 +108,8 @@ function App() {
             isActive={activePlayer === 'O'}
           />
         </ol>
-        <GameBoards onSelectSquare={handleSelectSquare} turns={gameTurns} />
+        {winner && <p>{winner} Winner</p>}
+        <GameBoards onSelectSquare={handleSelectSquare} baord={gameBoard} />
       </div>
       <Log turns={gameTurns} />
     </main>

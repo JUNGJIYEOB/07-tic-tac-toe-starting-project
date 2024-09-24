@@ -1,16 +1,7 @@
-const initialGameBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
 
-function GameBoards({ onSelectSquare, turns }) {
-  let gameBoard = initialGameBoard;
-  for (const turn of turns) {
-    const { square, player } = turn; //객체 분해할당
-    const { row, col } = square; //객체 분해할당 2번 한 것
-    gameBoard[row][col] = player;
-  }
+
+function GameBoards({ onSelectSquare, baord }) {
+
   // const [gameBoard, setGameBoard] = useState(initialGameBoard);
 
   // function handleSelectSquare(rowIndex, colIndex) {
@@ -30,7 +21,7 @@ function GameBoards({ onSelectSquare, turns }) {
 
   return (
     <ol id='game-board'>
-      {gameBoard.map((row, rowIndex) => (
+      {baord.map((row, rowIndex) => (
         <li key={rowIndex}>
           <ol>
             {row.map((playerSymbol, colIndex) => (

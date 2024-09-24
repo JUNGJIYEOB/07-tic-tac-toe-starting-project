@@ -4,7 +4,7 @@ function Log({ turns }) {
       {turns.map((turn) => (
         /* js 문법  */
         <li key={'${turn.square.row}${turns.square.col}'}>
-          {turn.player} selected col : {turn.square.row}, row :{' '}
+          {turn.player} player selected col : {turn.square.row}, row :{' '}
           {turn.square.col}{' '}
         </li>
       ))}
