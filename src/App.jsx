@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import GameBoards from './componets/GameBoard';
+import GameOver from './componets/GameOver';
 import Log from './componets/Log';
 import Player from './componets/Player';
 import { WINNING_COMBINATIONS } from './componets/WINNING-COMBINATIONS.JS';
+
 //js null => false
 const initialGameBoard = [
   [null, null, null],
@@ -36,11 +38,11 @@ function App() {
    * const [activePlayer, setActivePlayer] = useState('X'); => 이 부분을 삭제하고도 파생된 상태를 더 할 수 있고
    *
    */
-  const [gameTurns, setGameTurns] = useState([]);
+  const [gameTurns, setGameTurns] = useState([]); //젙체 게임에서 true/false 를 도출할 수 있는 하나뿐인 출처
 
   const activePlayer = deriveActivePlayer(gameTurns);
-
-  let gameBoard = initialGameBoard;
+  //[...initialGameBoard] 얕은 복사(껍떼기만 복사) 객체의 1depth까지만 복사하는 것을 말한다.
+  let gameBoard = [...initialGameBoard.map((array) => [...array])]; //깊은 복사
   let winner;
   for (const turn of gameTurns) {
     const { square, player } = turn; //객체 분해할당
@@ -63,7 +65,7 @@ function App() {
       winner = firstSquareSymbol;
     }
   }
-
+  const hasDraw = gameTurns.length === 9 && !winner;
   function handleSelectSquare(rowIndex, colIndex) {
     //이전 상태에서 상태 변경을 할 때에는 하단의 방법과 같이 해야함
     setGameTurns((prevTurns) => {
@@ -92,7 +94,9 @@ function App() {
       return updatedTurns;
     });
   }
-
+  function handleRestart() {
+    setGameTurns([]);
+  }
   return (
     <main>
       <div id='game-container'>
@@ -108,7 +112,9 @@ function App() {
             isActive={activePlayer === 'O'}
           />
         </ol>
-        {winner && <p>{winner} Winner</p>}
+        {(winner || hasDraw) && (
+          <GameOver winner={winner} onRestart={handleRestart} />
+        )}
         <GameBoards onSelectSquare={handleSelectSquare} baord={gameBoard} />
       </div>
       <Log turns={gameTurns} />
